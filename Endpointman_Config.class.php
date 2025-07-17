@@ -11,6 +11,12 @@ namespace FreePBX\modules;
 
 class Endpointman_Config
 {
+	protected $freepbx;
+	protected $cfgmod;
+	protected $system;
+	protected $db;
+	protected $config;
+	protected $configmod;
 	public $UPDATE_PATH;
     public $MODULES_PATH;
 	public $LOCAL_PATH;

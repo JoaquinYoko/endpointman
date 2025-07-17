@@ -46,8 +46,16 @@ function generate_xml_from_array ($array, $node_name, &$tab = -1)
 
 class Endpointman implements \BMO {
 
-	//public $epm_config;
-
+	public $epm_config;
+	public $epm_advanced;
+	public $epm_templates;
+	public $epm_devices;
+	public $epm_oss;
+	public $epm_placeholders;
+ 	public $freepbx;
+	public $config;
+ 	public $configmod;
+	public $system;
 
 	public $db; //Database from FreePBX
 	public $eda; //endpoint data abstraction layer

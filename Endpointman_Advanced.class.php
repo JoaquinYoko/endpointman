@@ -15,12 +15,16 @@ class Endpointman_Advanced
     public $MODULES_PATH;
 	public $LOCAL_PATH;
 	public $PHONE_MODULES_PATH;
-
-	public function __construct($freepbx = null, $cfgmod = null, $epm_config)
+	public $freepbx;
+        public $db;
+        public $config;
+        public $configmod;
+        public $epm_config;
+	public function __construct($epm_config,$freepbx = null, $cfgmod = null)
 	{
 		$this->freepbx = $freepbx;
-		$this->db = $freepbx->Database;
-		$this->config = $freepbx->Config;
+		$this->db = \FreePBX::Database();
+		$this->config = \FreePBX::Config();
 		$this->configmod = $cfgmod;
 		$this->epm_config = $epm_config;
 
