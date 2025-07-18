@@ -52,8 +52,8 @@ if (isset($_REQUEST['page'])) {
 } else {
 	$page = "";
 }
-if($global_cfg['debug']) {
-	$debug .= "Request Variables: \n".print_r($_REQUEST, TRUE);
+if (!empty($global_cfg['debug'])) {
+    $debug .= "Request Variables: \n".print_r($_REQUEST, TRUE);
 }
 include LOCAL_PATH.'includes/devices_manager.inc';
 ?>

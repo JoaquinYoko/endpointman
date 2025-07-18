@@ -71,6 +71,7 @@ class Endpointman implements \BMO {
 	public $PHONE_MODULES_PATH;
 	public $PROVISIONER_BASE;
 
+	public $pagedata;
 
 	public function __construct($freepbx = null) {
 		if ($freepbx == null) {
@@ -600,45 +601,38 @@ define("PHONE_MODULES_PATH", $this->PHONE_MODULES_PATH);
      * @param integer $selected ID Number of the brand that is supposed to be selected in a drop-down list box
      * @return array Number array used to generate a select box
      */
-    function brands_available($selected = NULL, $show_blank=TRUE) {
-        $data = $this->eda->all_active_brands();
-        if ($show_blank) {
-            $temp[0]['value'] = "";
-            $temp[0]['text'] = "";
-            $i = 1;
-        } else {
-            $i = 0;
-        }
-        foreach ($data as $row) {
-            $temp[$i]['value'] = $row['id'];
-            $temp[$i]['text'] = $row['name'];
-            if ($row['id'] == $selected) {
-                $temp[$i]['selected'] = TRUE;
-            } else {
-                $temp[$i]['selected'] = NULL;
-            }
-            $i++;
-        }
-        return($temp);
-    }
+	function brands_available($selected = NULL, $show_blank=TRUE) {
+    		$data = $this->eda->all_active_brands();
+    		$temp = array(); // <-- Inicializa $temp
+    		if ($show_blank) {
+        		$temp[0]['value'] = "";
+        		$temp[0]['text'] = "";
+        		$i = 1;
+    		} else {
+        		$i = 0;
+    		}
+    		foreach ($data as $row) {
+        		$temp[$i]['value'] = $row['id'];
+        		$temp[$i]['text'] = $row['name'];
+        		$temp[$i]['selected'] = ($row['id'] == $selected) ? TRUE : NULL;
+        		$i++;
+    		}
+    		return($temp);
+	}
 
 	function listTZ($selected) {
-        require_once('lib/datetimezone.class.php');
-        $data = \DateTimeZone::listIdentifiers();
-        $i = 0;
-        foreach ($data as $key => $row) {
-            $temp[$i]['value'] = $row;
-            $temp[$i]['text'] = $row;
-            if (strtoupper ($temp[$i]['value']) == strtoupper($selected)) {
-                $temp[$i]['selected'] = 1;
-            } else {
-                $temp[$i]['selected'] = 0;
-            }
-            $i++;
-        }
-
-        return($temp);
-    }
+    		require_once('lib/datetimezone.class.php');
+    		$data = \DateTimeZone::listIdentifiers();
+    		$temp = array(); // <-- Inicializa $temp
+    		$i = 0;
+    		foreach ($data as $key => $row) {
+        		$temp[$i]['value'] = $row;
+        		$temp[$i]['text'] = $row;
+        		$temp[$i]['selected'] = (strtoupper($temp[$i]['value']) == strtoupper($selected)) ? 1 : 0;
+        		$i++;
+    		}
+    		return($temp);
+	}
 
 	function has_git() {
         exec('which git', $output);

@@ -56,6 +56,10 @@ class Endpointman_Config
 
 	}
 
+	public function get($key, $default = null) {
+	    return isset($this->cfgmod[$key]) ? $this->config[$key] : $default;
+	}
+
 	public function myShowPage(&$pagedata) {
 	}
 
