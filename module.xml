@@ -4,15 +4,15 @@
 	<name>OSS PBX End Point Manager</name>
 	<version>14.0.4</version>
 	<type>setup</type>
-	<category>Settings</category>
+	<category>Connectivity</category>
 	<license>GPLv3+</license>
 	<licenselink>http://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
 	<menuitems>
-		<epm_devices needsenginedb="yes" sort="1" hidden="true">Device List</epm_devices>
-		<epm_templates needsenginedb="yes" sort="2" hidden="true">Template Manager</epm_templates>
-		<epm_config needsenginedb="yes" sort="3" hidden="true">Package Manager</epm_config>
-		<epm_advanced needsenginedb="yes" sort="4" hidden="true">Advanced Settings</epm_advanced>
-		<epm_placeholders needsenginedb="yes" sort="4" hidden="true">Config File Placeholders</epm_placeholders>
+		<epm_devices needsenginedb="yes" sort="0" >OSS Device List</epm_devices>
+		<epm_templates needsenginedb="yes" sort="0" >OSS Template Manager</epm_templates>
+		<epm_config needsenginedb="yes" sort="0" >OSS Package Manager</epm_config>
+		<epm_advanced needsenginedb="yes" sort="0">OSS Advanced Settings</epm_advanced>
+		<epm_placeholders needsenginedb="yes" sort="0" >OSS Config File Placeholders</epm_placeholders>
 		<epm_oss needsenginedb="yes" sort="0">OSS Endpoint Manager</epm_oss>
 	</menuitems>
 	<description>
