@@ -174,7 +174,7 @@ define("PHONE_MODULES_PATH", $this->PHONE_MODULES_PATH);
 		$this->epm_config = new Endpointman_Config($freepbx, $this->configmod, $this->system);
 
 		require_once('Endpointman_Advanced.class.php');
-		$this->epm_advanced = new Endpointman_Advanced($freepbx, $this->configmod, $this->epm_config);
+		$this->epm_advanced = new Endpointman_Advanced($this->epm_config, $freepbx, $this->configmod);
 
 		require_once('Endpointman_Templates.class.php');
 		$this->epm_templates = new Endpointman_Templates($freepbx, $this->configmod, $this->epm_config, $this->eda);

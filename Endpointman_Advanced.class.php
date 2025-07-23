@@ -23,7 +23,7 @@ class Endpointman_Advanced
         public $system;
         public $epm_config;
 
-	public function __construct($freepbx = null, $cfgmod = null, $epm_config)
+	public function __construct($epm_config, $freepbx = null, $cfgmod = null)
 	{
 		$this->freepbx = $freepbx;
 		$this->db = \FreePBX::Database();
