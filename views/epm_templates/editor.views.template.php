@@ -64,16 +64,6 @@
            </div>
 			<div class="col-md-6">
             	<div class="row">
-             		<div class="col-md-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa  fa-file-code-o fa-lg"></i> <?php echo _("Settings")?></h3>
-                            </div>
-                            <div class="panel-body">
-                                <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#CfgGlobalTemplate"><i class='fa fa-pencil-square-o'></i> <?php echo _('Edit Global Settings Overrides')?></button>
-                            </div>
-                        </div>
-                	</div>
 				</div>
                 <div class="row">
              		<div class="col-md-12">

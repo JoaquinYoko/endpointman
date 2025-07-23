@@ -8,9 +8,11 @@
 namespace FreePBX\modules;
  
 class epm_data_abstraction {
-    protected $config;
-    protected $configmod;
+
+    public $config;
+    public $configmod;
     public $global_cfg;
+
     function __construct($config, $configmod) {
     	
     	$this->config = $config;

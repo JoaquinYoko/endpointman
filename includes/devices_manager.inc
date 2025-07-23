@@ -152,11 +152,11 @@ switch ($sub_type) {
 			foreach($_REQUEST['selected'] as $key => $data) {
 			
 				foreach($lines as $line){
-						if ($data == $line[ext]){
+						if ($data == $line['ext']){
 						$sql = "SELECT mac_id FROM endpointman_line_list WHERE ext = " . $data;
 						$endpoint->eda->sql($sql);
 						$macid = $endpoint->eda->sql($sql,'getrow',DB_FETCHMODE_ASSOC);
-						$_REQUEST['selected'][$key] = $macid[mac_id];
+						$_REQUEST['selected'][$key] = $macid['mac_id'];
 						
 						}
 				}
@@ -302,11 +302,11 @@ switch ($sub_type) {
 			foreach($_REQUEST['selected'] as $key => $data) {
 			
 				foreach($lines as $line){
-						if ($data == $line[ext]){
+						if ($data == $line['ext']){
 						$sql = "SELECT mac_id FROM endpointman_line_list WHERE ext = " . $data;
 						$endpoint->eda->sql($sql);
 						$macid = $endpoint->eda->sql($sql,'getrow',DB_FETCHMODE_ASSOC);
-						$_REQUEST['selected'][$key] = $macid[mac_id];
+						$_REQUEST['selected'][$key] = $macid['mac_id'];
 						
 						}
 				}
@@ -529,8 +529,10 @@ if (isset($template_editor)) {
     $endpoint->tpl->assign("mode", $mode);
 
 	
-    $edit_row['id'] = isset($edit_row['id']) ? $edit_row['id'] : '0';
-    $endpoint->tpl->assign("edit_id", $edit_row['id']);
+	$edit_row['id'] = isset($edit_row['id']) ? $edit_row['id'] : '0';
+	$edit_row['template_id'] = isset($edit_row['template_id']) ? $edit_row['template_id'] : '0';
+
+	$endpoint->tpl->assign("edit_id", $edit_row['id']);
 	$endpoint->tpl->assign("template_id", $edit_row['template_id']);
 	
 	if ($edit_row['template_id'] == "0"){

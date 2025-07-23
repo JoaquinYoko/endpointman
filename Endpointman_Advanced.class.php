@@ -12,15 +12,18 @@ use FreePBX;
 
 class Endpointman_Advanced
 {
-    public $MODULES_PATH;
+        public $MODULES_PATH;
 	public $LOCAL_PATH;
 	public $PHONE_MODULES_PATH;
-	public $freepbx;
+
+        public $freepbx;
         public $db;
         public $config;
         public $configmod;
+        public $system;
         public $epm_config;
-	public function __construct($epm_config,$freepbx = null, $cfgmod = null)
+
+	public function __construct($freepbx = null, $cfgmod = null, $epm_config)
 	{
 		$this->freepbx = $freepbx;
 		$this->db = \FreePBX::Database();
@@ -1054,16 +1057,9 @@ class Endpointman_Advanced
 			echo "No send name file!";
 			die();
 		}
-		else if(! mb_ereg_match('^[a-z]+-[0-9]+.tgz$', basename($_REQUEST['file_package']))) {
-			/* File package name format: brandname-1234567890.tgz */
-			header('HTTP/1.0 418 I\'m a teapot', true, 418);
-			echo "<h1>Error 418 I'm a teapot</h1>";
-			echo "Poor file name!";
-			die();
-		}
 		else {
-			$dget['file_package'] = basename($_REQUEST['file_package']);
-			$path_tmp_file = $this->PHONE_MODULES_PATH."/temp/export/".$dget['file_package'];
+			$dget['file_package'] = $_REQUEST['file_package'];
+			$path_tmp_file = $this->PHONE_MODULES_PATH."/temp/export/".$_REQUEST['file_package'];
 
 			if (! file_exists($path_tmp_file)) {
 				header('HTTP/1.0 404 Not Found', true, 404);
@@ -1182,9 +1178,8 @@ class Endpointman_Advanced
 										//$res = sql($sql);
 										$res = sql($sql, 'getAll', DB_FETCHMODE_ASSOC);
 
-										if (count($res) > 0) {
+										if ($res) {  
 											$brand_id = sql($sql, 'getOne');
-										//	$brand_id = $brand_id[0];
 
 											$sql_model = "SELECT id FROM endpointman_model_list WHERE brand = " . $brand_id . " AND model LIKE '%" . $device[2] . "%' LIMIT 1";
 											$sql_ext = "SELECT extension, name FROM users WHERE extension LIKE '%" . $device[3] . "%' LIMIT 1";
