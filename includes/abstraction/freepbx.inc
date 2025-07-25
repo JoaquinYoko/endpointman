@@ -27,10 +27,10 @@ class epm_data_abstraction {
     function sql($sql, $type="query", $fetchmode=null) {
         global $db;
         $results = $db->$type($sql, $fetchmode);
-        if (DB::IsError($results)) {
+/*        if (DB::IsError($results)) {
             throw new Exception($results->getMessage());
             // $this->sql_error($results);
-        }
+        }*/
         return $results;
     }
 

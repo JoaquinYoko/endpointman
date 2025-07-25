@@ -204,7 +204,9 @@ function endpointman_configpageload() {
     $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
     $extdisplay = isset($_REQUEST['extdisplay']) ? $_REQUEST['extdisplay'] : null;
     if (isset($extdisplay) && !empty($extdisplay)) {
-        $sql = "SELECT tech FROM devices WHERE id = " . $extdisplay;
+	$extdisplay = (int)$extdisplay;
+        $sql = "SELECT tech FROM devices WHERE id = $extdisplay";
+//	$tech = "pjsip";
         $tech = $endpoint->eda->sql($sql, 'getOne');
     } else {
         $tech = isset($_REQUEST['tech_hardware']) ? $_REQUEST['tech_hardware'] : null;

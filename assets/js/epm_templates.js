@@ -2,7 +2,7 @@
 var cmeditor = null;
 
 function epm_templates_document_ready () {
-	
+	console.log('a');	
 	var arrayJs = ['assets/endpointman/js/addon/simplescrollbars.js', 'assets/endpointman/js/mode/xml.js'];
 	arrayJs.forEach(function (item, index, array) {
 		var x = document.createElement('script');
@@ -207,6 +207,7 @@ function epm_templates_grid_FormatThAction(value, row, index){
 
 function epm_templates_add_NewProductSelect_Change (obj)
 {
+	console.log('a');
 	if ($(obj).val() != "") {
 		$.ajax({
 			type: 'POST',
@@ -226,6 +227,7 @@ function epm_templates_add_NewProductSelect_Change (obj)
 			},
 			success: function(data) 
 			{
+				console.log(data);
 				var options = '';
 				if (data.status == true) 
 				{
