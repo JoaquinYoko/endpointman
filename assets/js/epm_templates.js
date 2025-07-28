@@ -207,7 +207,7 @@ function epm_templates_grid_FormatThAction(value, row, index){
 
 function epm_templates_add_NewProductSelect_Change (obj)
 {
-	console.log('a');
+	console.log('Producto selec');
 	if ($(obj).val() != "") {
 		$.ajax({
 			type: 'POST',

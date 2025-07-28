@@ -38,7 +38,7 @@ if($_REQUEST['atype'] == "model") {
 } elseif ($_REQUEST['atype'] == "template2") {
 	$sql = "SELECT DISTINCT endpointman_template_list.id, endpointman_template_list.name as model FROM endpointman_template_list, endpointman_model_list, endpointman_product_list WHERE endpointman_template_list.product_id = endpointman_model_list.product_id AND endpointman_model_list.product_id = endpointman_product_list.id AND endpointman_model_list.id = '". $_GET['id']."'";
 } elseif ($_REQUEST['atype'] == "model_clone") {
-        $sql = "SELECT endpointman_model_list.id, endpointman_model_list.model as model FROM endpointman_model_list, endpointman_product_list WHERE endpointman_product_list.id = endpointman_model_list.product_id AND endpointman_model_list.enabled = 1 AND endpointman_model_list.hidden = 0 AND product_id = '". $_GET['id']."'";
+        $sql = "SELECT endpointman_model_list.id, endpointman_model_list.model as model FROM endpointman_model_list, endpointman_product_list WHERE endpointman_product_list.id = endpointman_model_list.product_id AND endpointman_model_list.hidden = 0 AND product_id = 81";
 } elseif ($_REQUEST['atype'] == "lines") {
     if(isset($_REQUEST['macid'])) {
         $sql = "SELECT endpointman_model_list.max_lines FROM endpointman_model_list,endpointman_line_list,endpointman_mac_list WHERE endpointman_mac_list.id = endpointman_line_list.mac_id AND endpointman_model_list.id = endpointman_mac_list.model AND endpointman_line_list.luid = ". $_REQUEST['macid'];
