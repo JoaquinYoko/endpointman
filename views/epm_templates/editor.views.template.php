@@ -34,6 +34,7 @@
                                         <td class="col-md-9">
                                         <select class="form-control selectpicker show-tick" data-style="btn-primary" data-live-search-placeholder="Search" data-live-search="true" name="model_list" id="model_list" >
                                             <?php
+
                                             foreach($dtemplate['models_ava'] as $row) {
                                                 echo '<option value="'.$row['value'].'" '.(!empty($row['selected']) ? "selected" : "").'>'.$row['text'].'</option>';
                                             }

@@ -18,13 +18,14 @@ class Endpointman_Templates
 	public $epm_config;
 	public $eda;
 
-	public function __construct($eda, $epm_config, $freepbx = null, $cfgmod = null) 
+	public function __construct($eda, $epm_cfg, $freepbx = null, $cfgmod = null) 
 	{
 		$this->freepbx = $freepbx;
 		$this->db = \FreePBX::Database();
 		$this->config = \FreePBX::Config();
 		$this->configmod = $cfgmod;
-		$this->epm_config = $epm_config;
+		$this->epm_config = $epm_cfg;
+
 		$this->eda = $eda;
 	}
 
@@ -641,9 +642,9 @@ class Endpointman_Templates
 		$dReturn['model'] = $row['model_name'];
 
 		if ($ma = $this->models_available($row['model_id'], NULL, $row['product_id'])) {
-			$dReturn['models_ava'] = $ma;
-		}
-
+			$dReturn['models_ava'] = $ma;		
+}
+		
 		if (isset($_REQUEST['maxlines'])) {
 			$areas = $this->areaAvailable($row['model_id'], $_REQUEST['maxlines']);
 		} else {
@@ -757,7 +758,10 @@ class Endpointman_Templates
     		if (! $this->configmod->isExiste('new')) {
     			$this->error['modelsAvailable'] = "You need to enable at least ONE model";
     		}
+		var_dump("fallo");
+		exit;
     		return(FALSE);
+
     	} else {
     		return($temp);
     	}

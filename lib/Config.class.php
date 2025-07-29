@@ -52,6 +52,9 @@ class Config {
 	public function del($var) { 
 		if ($this->isExiste($var)) { unset($this->module_conf[$var]); } 
 	}
+	/*public function sync_model($model, &$error = array()) {
+		// ...
+	}*/
 }
 
 ?>
