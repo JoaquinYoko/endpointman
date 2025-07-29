@@ -758,8 +758,6 @@ class Endpointman_Templates
     		if (! $this->configmod->isExiste('new')) {
     			$this->error['modelsAvailable'] = "You need to enable at least ONE model";
     		}
-		var_dump("fallo");
-		exit;
     		return(FALSE);
 
     	} else {
