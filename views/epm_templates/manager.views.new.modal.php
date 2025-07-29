@@ -58,14 +58,7 @@
 					</div>
 					<div class="row">
 						<div class="col-md-12">
-							<span class="help-block fpbx-help-block" id="NewProductSelect-help"><?php if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['NewProductSelect'])) {
-        $productoSeleccionado = $_POST['NewProductSelect'];
-        echo "Producto seleccionado (ID): " . htmlspecialchars($productoSeleccionado);
-    } else {
-        echo "No se seleccionó ningún producto.";
-    }
-}
+							<span class="help-block fpbx-help-block" id="NewProductSelect-help"><?php 
 echo _("Texto Ayuda.")?></span>
 						</div>
 					</div>
