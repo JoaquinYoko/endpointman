@@ -1013,7 +1013,7 @@ function epm_config_tab_manager_countlist(iL0)
 
 function epm_config_tab_manager_bt_enable_disable_ajustar(iL0, itemData, level) 
 {
-	if (level == "L1") 
+	/*if (level == "L1") 
 	{
 		$('#' + iL0.prefijoid + "_bt_brand_install").attr("disabled", 	((itemData.installed == "1") ? true : false));
 		$('#' + iL0.prefijoid + "_bt_brand_uninstall").attr("disabled", ((itemData.installed == "1") ? false : true));
@@ -1055,6 +1055,42 @@ function epm_config_tab_manager_bt_enable_disable_ajustar(iL0, itemData, level)
 			}
 		}
 		return;
-	}	
+	}*/
+	if (level == "L1") {
+    $('#' + iL0.prefijoid + "_bt_brand_install").prop("checked", itemData.installed == "1");
+    $('#' + iL0.prefijoid + "_bt_brand_uninstall").prop("checked", itemData.installed != "1");
+    $('#' + iL0.prefijoid + "_bt_brand_update").prop("checked", itemData.update == 1);
+    epm_global_html_find_show_hide('#' + iL0.prefijoid + "_txt_update", itemData.update == 1);
+    return;
+}
+else if (level == "L2") {
+    if (itemData.fw_type == "install" || itemData.fw_type == "remove") {
+        $('#' + iL0.prefijoid + "_bt_fw_install").prop("checked", itemData.fw_type == "install");
+        $('#' + iL0.prefijoid + "_bt_fw_uninstall").prop("checked", itemData.fw_type != "install");
+        $('#' + iL0.prefijoid + "_bt_fw_update").prop("checked", itemData.update_fw != 1);
+    } else if (itemData.fw_type == "nothing") {
+        $('#' + iL0.prefijoid + "_bt_fw_install").prop("checked", false);
+        $('#' + iL0.prefijoid + "_bt_fw_uninstall").prop("checked", false);
+        $('#' + iL0.prefijoid + "_bt_fw_update").prop("checked", false);
+    }
+    return;
+}
+else if (level == "L3") {
+    if (itemData.enabled === "") {
+        $("#" + iL0.prefijoid + "_enable").prop("checked", false);
+        $("#" + iL0.prefijoid + "_disable").prop("checked", false);
+        epm_global_html_find_hide_and_remove('#' + iL0.boxsubite);
+    }
+    else {
+        var temp_input = $('input[name="'+ iL0.prefijoid +'"]:checked');
+        if (temp_input.length === 0) temp_input = "-1";
+        if (itemData.enabled !== temp_input) {
+            $("#" + iL0.prefijoid + "_enable").prop("checked", itemData.enabled == "1");
+            $("#" + iL0.prefijoid + "_disable").prop("checked", itemData.enabled == "0");
+        }
+    }
+    return;
+}
+	
 }
 //**** END: TAB/MANAGER ****
