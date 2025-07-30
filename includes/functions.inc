@@ -3149,7 +3149,7 @@ class endpointmanager {
         if ((!empty($model)) OR ($model > 0)) {
             $sql = "SELECT * FROM  endpointman_model_list WHERE id='" . $model . "'";
 
-            $model_row = $this->eda->sql($sql, 'getrow', DB_FETCHMODE_ASSOC);
+            $model_row = $this->eda->sql($sql, 'getRow', DB_FETCHMODE_ASSOC);
 
             $sql = "SELECT * FROM  endpointman_product_list WHERE id='" . $model_row['product_id'] . "'";
 

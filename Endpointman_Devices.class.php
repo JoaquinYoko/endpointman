@@ -19,7 +19,7 @@ class Endpointman_Devices
 	public function __construct($freepbx = null, $cfgmod = null) 
 	{
 		$this->freepbx = $freepbx;
-                $this->db = \FreePBX::Database();
+                $this->db = $freepbx->Database;//\FreePBX::Database();
                 $this->config = \FreePBX::Config();
 		$this->configmod = $cfgmod;			
 	}

@@ -7,10 +7,11 @@
         <script type="text/javascript" src="assets/endpointman/js/jquery.tools.min.js"></script>
         <script type="text/javascript" src="assets/endpointman/js/jquery.easing.1.3.js"></script>
         <script type="text/javascript" src="assets/endpointman/js/jquery.coda-slider-3.0.js"></script>
+	
         <?php
 	}
 ?>
-        <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
         <link href="assets/css/mainstyle.css" rel="stylesheet" type="text/css" />
         <style>
             .tooltip {
