@@ -1,8 +1,6 @@
 "use strict";
 var box = null;
-console.log('aaaa');
 $(document).ready(function() {
-	//console.log('a');
 	var displayActual = epm_global_getDisplayActual();
 	
 	$('ul[role=tablist] li a').on("click", function(){

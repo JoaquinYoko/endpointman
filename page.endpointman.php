@@ -27,7 +27,7 @@ switch ($page) {
         include LOCAL_PATH . 'includes/advanced.inc';
         break;
 
-    case 'epm_templates':
+    case 'template_manager':
         include LOCAL_PATH . 'includes/template_manager.inc';
         break;
 

@@ -402,7 +402,7 @@ class Endpointman_Templates
 			
 			$i=0;
 			$out = array();
-			$sql = "SELECT endpointman_model_list.id, endpointman_model_list.model as model FROM endpointman_model_list, endpointman_product_list WHERE endpointman_product_list.id = endpointman_model_list.product_id AND endpointman_model_list.hidden = 0 AND product_id = '". $dget['id']."'";
+			$sql = "SELECT endpointman_model_list.id, endpointman_model_list.model as model FROM endpointman_model_list, endpointman_product_list WHERE endpointman_product_list.id = endpointman_model_list.product_id AND endpointman_model_list.enabled = 1 AND endpointman_model_list.hidden = 0 AND product_id = '". $dget['id']."'";
 			$result = sql($sql,'getAll', DB_FETCHMODE_ASSOC);
 			foreach($result as $row) {
 				$out[$i]['optionValue'] = $row['id'];
