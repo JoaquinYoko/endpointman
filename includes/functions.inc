@@ -46,6 +46,9 @@ class endpointmanager {
         //Generate empty array
         $this->error = array();
         $this->message = array();
+	$this->message = [
+	    'add_line' => ''
+	];
 
         //Move all information from the global $amp_conf into our public space. This will help prevent security concerns
         if (isset($amp_conf) AND is_array($amp_conf)) {
@@ -914,7 +917,7 @@ class endpointmanager {
 				$phone_info['line'][$line['line']]['transport']=$sipextensions[$phone_info['line'][$line['line']]['extension'] . '-' . 'transport']['data'];
 				$phone_info['line'][$line['line']]['trustrpid']=$sipextensions[$phone_info['line'][$line['line']]['extension'] . '-' . 'trustrpid']['data'];
 				$phone_info['line'][$line['line']]['callerid']=$sipextensions[$phone_info['line'][$line['line']]['extension'] . '-' . 'callerid']['data'];
-				$phone_info['line'][$line['line']]['encryption']=$sipextensions[$phone_info['line'][$line['line']]['extension'] . '-' . 'encryption']['data'];
+				$phone_info['line'][$line['line']]['encryption']=$sipextensions[$phone_info['line'][$line['line']]['extension'] . '-' . 'encryption']['data'] ?? '';
 				$phone_info['line'][$line['line']]['timestamp']=time();
 				
 				
@@ -1678,13 +1681,13 @@ class endpointmanager {
 			
 	//Add Additional MAC File Symlinks to enable autoprovisioning for Multicell Devices like Snom and much more devices
 				//$additionalmacs should be added as Input field in the Template JSON File and MAC Adresses should be inserted comma "," separated.
-				$globalcfgdata = unserialize($phone_info['global_custom_cfg_data']);
-				$globalcfgdata_cs = unserialize($phone_info['template_data_info']['global_custom_cfg_data']);
+				$globalcfgdata = unserialize($phone_info['global_user_cfg_data'] ?? '') ?: [];//unserialize($phone_info['global_custom_cfg_data']);
+				$globalcfgdata_cs = unserialize($phone_info['template_data_info']['global_custom_cfg_data'] ?? '') ?: [];//unserialize($phone_info['template_data_info']['global_custom_cfg_data']);
 				
 				
-				$additionalmacs = $globalcfgdata['data']['additionalmacs'];
+				$additionalmacs = $globalcfgdata['data']['additionalmacs'] ?? '';
 				$additionalmacs = explode(',', $additionalmacs);
-				$additionalmacs_cs = $globalcfgdata_cs['data']['additionalmacs'];
+				$additionalmacs_cs = $globalcfgdata_cs['data']['additionalmacs'] ?? '';
 				$additionalmacs_cs = explode(',', $additionalmacs_cs);
 				
 				$filelist = scandir($write_path);
@@ -1872,9 +1875,9 @@ class endpointmanager {
 
                 $temp = "";
                 $template_data = unserialize($phone_info['template_data']);
-                $global_user_cfg_data = unserialize($phone_info['global_user_cfg_data']);
+                $global_user_cfg_data = unserialize($phone_info['global_user_cfg_data'] ?? '') ?: [];//unserialize($phone_info['global_user_cfg_data']);
                 if ($phone_info['template_id'] > 0) {
-                    $global_custom_cfg_data = unserialize($phone_info['template_data_info']['global_custom_cfg_data']);
+                    $global_custom_cfg_data =  unserialize($phone_info['template_data_info']['global_custom_cfg_data'] ?? '') ?: [];//unserialize($phone_info['template_data_info']['global_custom_cfg_data']);
                     //Provide alternate Configuration file instead of the one from the hard drive
                     if (!empty($phone_info['template_data_info']['config_files_override'])) {
                         $temp = unserialize($phone_info['template_data_info']['config_files_override']);
@@ -2022,7 +2025,7 @@ class endpointmanager {
                 //Loop through Lines!
                 $li = 0;
                 foreach ($phone_info['line'] as $line) {
-                    $line_options = is_array($line_ops[$line['line']]) ? $line_ops[$line['line']] : array();
+$line_options = $line_ops[$line['line']] ?? [];//$line_options = is_array($line_ops[$line['line']]) ? $line_ops[$line['line']] : array();
                     $line_statics = array(
 					'line' => $line['line'],
 					'username' => $line['ext'],
@@ -2041,7 +2044,7 @@ class endpointmanager {
 					'transport' => $line['transport'],
 					'trustrpid' => $line['trustrpid'],
 					'callerid' => $line['callerid'],
-					'encryption' => $line['encryption'],							
+					'encryption' => $line['encryption'] ?? '',							
 					'tech' => $line['tech'],
 					'ipei' => $line['ipei'],
 					'myvoicemail' => $provisioner_lib->settings['myvoicemail'],
@@ -2051,10 +2054,10 @@ class endpointmanager {
 					'primtimeserver' => $this->global_cfg['ntp'],
 					'globaladminpassword' => $this->global_cfg['adminpass'],
 					'globaluserpassword' => $this->global_cfg['userpass'],
-					'provisuser' => $getSysadminSettings['provisuser']['value'],
-					'provispass' => $getSysadminSettings['provispass']['value'],
-					'sslhpro' => $getSysadminSettings['sslhpro']['value'],
-					'hpro' => $getSysadminSettings['hpro']['value']
+					'provisuser' => $getSysadminSettings['provisuser']['value'] ?? '',
+					'provispass' => $getSysadminSettings['provispass']['value'] ?? '',
+					'sslhpro'    => $getSysadminSettings['sslhpro']['value'] ?? '',
+					'hpro'       => $getSysadminSettings['hpro']['value'] ?? '',
 					);
 	
 
@@ -2075,17 +2078,17 @@ class endpointmanager {
 					$provisioner_lib->settings['acc' . $line['line'] . 'transport'] = $line['transport'];
 					$provisioner_lib->settings['acc' . $line['line'] . 'trustrpid'] = $line['trustrpid'];
 					$provisioner_lib->settings['acc' . $line['line'] . 'callerid'] = $line['callerid'];
-					$provisioner_lib->settings['acc' . $line['line'] . 'encryption'] = $line['encryption'];
+					$provisioner_lib->settings['acc' . $line['line'] . 'encryption'] = $line['encryption'] ?? '';
 					$provisioner_lib->settings['acc' . $line['line'] . 'server_port'] = $line['server_port'];
 					$provisioner_lib->settings['acc' . $line['line'] . 'ipei'] = $line['ipei'];
 					$provisioner_lib->settings['server_host'] = $this->global_cfg['srvip'];
 					$provisioner_lib->settings['primtimeserver'] = $this->global_cfg['ntp'];
 					$provisioner_lib->settings['globaladminpassword'] = $this->global_cfg['adminpass'];
 					$provisioner_lib->settings['globaluserpassword'] = $this->global_cfg['userpass'];
-					$provisioner_lib->settings['provisuser'] = $getSysadminSettings['provisuser']['value'];
-					$provisioner_lib->settings['provispass'] = $getSysadminSettings['provispass']['value'];
-					$provisioner_lib->settings['sslhpro'] = $getSysadminSettings['sslhpro']['value'];
-					$provisioner_lib->settings['hpro'] = $getSysadminSettings['hpro']['value'];
+					$provisioner_lib->settings['provisuser'] = $getSysadminSettings['provisuser']['value'] ?? '';
+					$provisioner_lib->settings['provispass'] = $getSysadminSettings['provispass']['value'] ?? '' ;
+					$provisioner_lib->settings['sslhpro'] = $getSysadminSettings['sslhpro']['value'] ?? '';
+					$provisioner_lib->settings['hpro'] = $getSysadminSettings['hpro']['value'] ?? '';
 					
 					$provisioner_lib->settings['timestamp'] = time();
 
