@@ -21,4 +21,4 @@ To contribute code or modules back into the [FreePBX](http://www.freepbx.org/ "F
 ### Issues
 Please file bug reports at http://issues.freepbx.org# endpointman
 
-NOTE 1: Please replace your modules/_ep_phone_modules/endpoint/base.php with the repository _ep_phone_modules/endpoint/base.php . If you wanna know why, check the commit where it is added.
+NOTE 1: Please replace your modules/_ep_phone_modules/endpoint/base.php with the file in this repository _ep_phone_modules/endpoint/base.php .
