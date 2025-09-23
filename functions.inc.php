@@ -267,8 +267,8 @@ function endpointman_configpageload() {
                 $currentcomponent->addjsfunc('model_change(value,macid)', $js);
 
                 $info = $endpoint->get_phone_info($line_info['mac_id']);
-var_dump($info);
-exit;
+//var_dump($info);
+//exit;
                 $brand_list = $endpoint->brands_available($info['brand_id'], true);
                 if (!empty($info['brand_id'])) {
                     $model_list = $endpoint->models_available(NULL, $info['brand_id']);
@@ -285,6 +285,8 @@ exit;
                 $currentcomponent->addguielem($section, new gui_checkbox('epm_delete', $checked, 'Delete', 'Delete this Extension from Endpoint Manager'), 9);
 // phone web interface link
 	class gui_link_nw_tab extends guitext {
+	public $html_text;
+	public $elemname;
     function __construct($elemname, $text, $url, $userlang = true) {
         $parent_class = get_parent_class($this);
         $this->html_text = "<a href=\"$url\" target=\"_blank\" id =\"$this->elemname\">$text</a>";
