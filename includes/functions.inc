@@ -814,6 +814,7 @@ class endpointmanager {
 	public function getSysadminSettings(){
 	//SYSADMIN IS A COMERCIAL MODULE - CHECK IF IT IS INSTALLED, ELSE THIS FEATURE WILL BE SKIPPED.
 	global $active_modules;
+	$ret = array();
 	if (!empty($active_modules['sysadmin']['rawname'])) {	
 		$ret = array();
 		
@@ -1166,6 +1167,7 @@ class endpointmanager {
      */
     function generate_gui_html($cfg_data, $custom_cfg_data=NULL, $admin=FALSE, $user_cfg_data=NULL, $max_lines=3, $ext=NULL) {
         //take the data out of the database and turn it back into an array for use
+	$items = NULL;
         $cfg_data = unserialize($cfg_data);
         $template_type = 'GENERAL';
         //Check to see if there is a custom template for this phone already listed in the endpointman_mac_list database
@@ -1176,7 +1178,7 @@ class endpointmanager {
                     $extra_data = $custom_cfg_data['ari'];
                 } else {
                     $template_type = 'GLOBAL';
-                    $extra_data = $custom_cfg_data['freepbx'];
+                    $extra_data = $custom_cfg_data['freepbx'] ?? NULL;
                 }
                 $custom_cfg_data = $custom_cfg_data['data'];
             } else {
@@ -1386,7 +1388,7 @@ class endpointmanager {
                 $template_variables_array['type'] = "checkbox";
                 $template_variables_array['key'] = $key;
                 $template_variables_array['description'] = $cfg_data['description'];
-                $template_variables_array['checked'] = $custom_cfg_data[$key] ? TRUE : NULL;
+                $template_variables_array['checked'] = $custom_cfg_data[$key] ?? TRUE;
                 $template_variables_array['value'] = $key;
                 break;
             case "group";
