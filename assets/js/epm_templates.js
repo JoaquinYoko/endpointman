@@ -19,7 +19,7 @@ function epm_templates_document_ready () {
 		includeTitle:false,
 		continuous:false,
 		slideEaseFunction: "easeInOutCubic",
-		preloader:true,
+		preloader:false,
 		onload: function() {
 			this.alignNavigation();
 			$('.liquid-slider').css('visibility', 'visible');
