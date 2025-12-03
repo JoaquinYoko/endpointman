@@ -803,7 +803,13 @@ class Endpointman_Templates
      */
     function generate_gui_html($cfg_data, $custom_cfg_data=NULL, $admin=FALSE, $user_cfg_data=NULL, $max_lines=3, $ext=NULL) {
     	//take the data out of the database and turn it back into an array for use
-    	$cfg_data = unserialize($cfg_data);
+	if (is_string($cfg_data)) {
+	    $cfg_data = @unserialize($cfg_data);
+	}
+	if (!is_array($cfg_data) || !isset($cfg_data['data'])) {
+	    // evitar errores si el template está dañado
+	    return array();
+	}
     	$template_type = 'GENERAL';
     	//Check to see if there is a custom template for this phone already listed in the endpointman_mac_list database
     	if (!empty($custom_cfg_data)) {
@@ -855,7 +861,7 @@ class Endpointman_Templates
     							foreach ($config_options as $var_name => $var_items) {
     								$lcount = isset($var_items['line_count']) ? $var_items['line_count'] : $lcount;
     								$key = "line|" . $lcount . "|" . $var_name;
-    								$items[$variables_count] = $items;
+								$items[$variables_count] = $var_items;
     								$template_variables_array[$group_count]['data'][$variables_count] = $this->generate_form_data($variables_count, $var_items, $key, $custom_cfg_data, $admin, $user_cfg_data, $extra_data, $template_type);
     								$template_variables_array[$group_count]['data'][$variables_count]['looping'] = TRUE;
     								$variables_count++;
@@ -1027,12 +1033,12 @@ class Endpointman_Templates
     			$template_variables_array['value'] = $key;
     			break;
     			
-    		case "group";
+    		case "group":
     			$template_variables_array['type'] = "group";
     			$template_variables_array['description'] = $cfg_data['description'];
     			break;
     			
-    		case "header";
+    		case "header":
     			$template_variables_array['type'] = "header";
     			$template_variables_array['description'] = $cfg_data['description'];
     			break;

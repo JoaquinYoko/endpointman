@@ -75,18 +75,18 @@
                             <div class="panel-body">
                                 <?php 
 								
-								//$list_all_files = array();
-                                //if ($dtemplate['alt'] != 0) {
-								//	$list_all_files = array_merge($dtemplate['alt_configs'], $dtemplate['only_configs']);
-								//}
-								//else {
-								//	$list_all_files = $dtemplate['only_configs'];
-								//}
+								$list_all_files = array();
+                                if ($dtemplate['alt'] != 0) {
+								$list_all_files = array_merge($dtemplate['alt_configs'], $dtemplate['only_configs']);
+								}
+								else {
+									$list_all_files = $dtemplate['only_configs'];
+								}
                                 
 								
 								$list_all_files = FreePBX::Endpointman()->epm_templates->edit_template_display_files_list($_REQUEST['idsel'],$_REQUEST['custom']);
                                 foreach($list_all_files as $row): 
-								//config.php?display=epm_templates&subpage=&custom=0&idsel=41
+				//				config.php?display=epm_templates&subpage=&custom=0&idsel=41
 								$row['idrefbox'] = $row['id']."_".$row['id_d']."_".$row['id_p'];
                                 ?>
 								<div class="col-md-12">
