@@ -150,8 +150,7 @@ $amp_send['AMPDBNAME'] = $amp_conf['AMPDBNAME'];
 		$model_list[$i]['value'] = $row['id'];
 		$model_list[$i]['text'] = $row['model'];
 		$i++;
-	}
-	
+	}	
 	
 	
 	

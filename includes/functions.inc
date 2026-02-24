@@ -46,6 +46,9 @@ class endpointmanager {
         //Generate empty array
         $this->error = array();
         $this->message = array();
+	$this->message = [
+	    'add_line' => ''
+	];
 
         //Move all information from the global $amp_conf into our public space. This will help prevent security concerns
         if (isset($amp_conf) AND is_array($amp_conf)) {
@@ -811,6 +814,7 @@ class endpointmanager {
 	public function getSysadminSettings(){
 	//SYSADMIN IS A COMERCIAL MODULE - CHECK IF IT IS INSTALLED, ELSE THIS FEATURE WILL BE SKIPPED.
 	global $active_modules;
+	$ret = array();
 	if (!empty($active_modules['sysadmin']['rawname'])) {	
 		$ret = array();
 		
@@ -875,7 +879,6 @@ class endpointmanager {
             $sql = "SELECT endpointman_mac_list.specific_settings, endpointman_mac_list.config_files_override, endpointman_mac_list.global_user_cfg_data, endpointman_model_list.id as model_id, endpointman_brand_list.id as brand_id, endpointman_brand_list.name, endpointman_brand_list.directory, endpointman_model_list.model, endpointman_mac_list.mac, endpointman_mac_list.template_id, endpointman_mac_list.global_custom_cfg_data, endpointman_product_list.long_name, endpointman_product_list.id as product_id, endpointman_product_list.cfg_dir, endpointman_product_list.cfg_ver, endpointman_model_list.template_data, endpointman_model_list.enabled, endpointman_mac_list.global_settings_override FROM endpointman_line_list, endpointman_mac_list, endpointman_model_list, endpointman_brand_list, endpointman_product_list WHERE endpointman_mac_list.model = endpointman_model_list.id AND endpointman_brand_list.id = endpointman_model_list.brand AND endpointman_product_list.id = endpointman_model_list.product_id AND endpointman_mac_list.id = endpointman_line_list.mac_id AND endpointman_mac_list.id = " . $mac_id;
 
             $phone_info = $this->eda->sql($sql, 'getRow', DB_FETCHMODE_ASSOC);
-
             if (!$phone_info) {
                 $this->error['get_phone_info'] = "Error with SQL Statement";
             }
@@ -914,7 +917,7 @@ class endpointmanager {
 				$phone_info['line'][$line['line']]['transport']=$sipextensions[$phone_info['line'][$line['line']]['extension'] . '-' . 'transport']['data'];
 				$phone_info['line'][$line['line']]['trustrpid']=$sipextensions[$phone_info['line'][$line['line']]['extension'] . '-' . 'trustrpid']['data'];
 				$phone_info['line'][$line['line']]['callerid']=$sipextensions[$phone_info['line'][$line['line']]['extension'] . '-' . 'callerid']['data'];
-				$phone_info['line'][$line['line']]['encryption']=$sipextensions[$phone_info['line'][$line['line']]['extension'] . '-' . 'encryption']['data'];
+				$phone_info['line'][$line['line']]['encryption']=$sipextensions[$phone_info['line'][$line['line']]['extension'] . '-' . 'encryption']['data'] ?? '';
 				$phone_info['line'][$line['line']]['timestamp']=time();
 				
 				
@@ -1163,6 +1166,7 @@ class endpointmanager {
      */
     function generate_gui_html($cfg_data, $custom_cfg_data=NULL, $admin=FALSE, $user_cfg_data=NULL, $max_lines=3, $ext=NULL) {
         //take the data out of the database and turn it back into an array for use
+	$items = NULL;
         $cfg_data = unserialize($cfg_data);
         $template_type = 'GENERAL';
         //Check to see if there is a custom template for this phone already listed in the endpointman_mac_list database
@@ -1173,7 +1177,7 @@ class endpointmanager {
                     $extra_data = $custom_cfg_data['ari'];
                 } else {
                     $template_type = 'GLOBAL';
-                    $extra_data = $custom_cfg_data['freepbx'];
+                    $extra_data = $custom_cfg_data['freepbx'] ?? NULL;
                 }
                 $custom_cfg_data = $custom_cfg_data['data'];
             } else {
@@ -1383,7 +1387,7 @@ class endpointmanager {
                 $template_variables_array['type'] = "checkbox";
                 $template_variables_array['key'] = $key;
                 $template_variables_array['description'] = $cfg_data['description'];
-                $template_variables_array['checked'] = $custom_cfg_data[$key] ? TRUE : NULL;
+                $template_variables_array['checked'] = $custom_cfg_data[$key] ?? TRUE;
                 $template_variables_array['value'] = $key;
                 break;
             case "group";
@@ -1678,13 +1682,13 @@ class endpointmanager {
 			
 	//Add Additional MAC File Symlinks to enable autoprovisioning for Multicell Devices like Snom and much more devices
 				//$additionalmacs should be added as Input field in the Template JSON File and MAC Adresses should be inserted comma "," separated.
-				$globalcfgdata = unserialize($phone_info['global_custom_cfg_data']);
-				$globalcfgdata_cs = unserialize($phone_info['template_data_info']['global_custom_cfg_data']);
+				$globalcfgdata = unserialize($phone_info['global_user_cfg_data'] ?? '') ?: [];//unserialize($phone_info['global_custom_cfg_data']);
+				$globalcfgdata_cs = unserialize($phone_info['template_data_info']['global_custom_cfg_data'] ?? '') ?: [];//unserialize($phone_info['template_data_info']['global_custom_cfg_data']);
 				
 				
-				$additionalmacs = $globalcfgdata['data']['additionalmacs'];
+				$additionalmacs = $globalcfgdata['data']['additionalmacs'] ?? '';
 				$additionalmacs = explode(',', $additionalmacs);
-				$additionalmacs_cs = $globalcfgdata_cs['data']['additionalmacs'];
+				$additionalmacs_cs = $globalcfgdata_cs['data']['additionalmacs'] ?? '';
 				$additionalmacs_cs = explode(',', $additionalmacs_cs);
 				
 				$filelist = scandir($write_path);
@@ -1872,9 +1876,9 @@ class endpointmanager {
 
                 $temp = "";
                 $template_data = unserialize($phone_info['template_data']);
-                $global_user_cfg_data = unserialize($phone_info['global_user_cfg_data']);
+                $global_user_cfg_data = unserialize($phone_info['global_user_cfg_data'] ?? '') ?: [];//unserialize($phone_info['global_user_cfg_data']);
                 if ($phone_info['template_id'] > 0) {
-                    $global_custom_cfg_data = unserialize($phone_info['template_data_info']['global_custom_cfg_data']);
+                    $global_custom_cfg_data =  unserialize($phone_info['template_data_info']['global_custom_cfg_data'] ?? '') ?: [];//unserialize($phone_info['template_data_info']['global_custom_cfg_data']);
                     //Provide alternate Configuration file instead of the one from the hard drive
                     if (!empty($phone_info['template_data_info']['config_files_override'])) {
                         $temp = unserialize($phone_info['template_data_info']['config_files_override']);
@@ -2022,7 +2026,7 @@ class endpointmanager {
                 //Loop through Lines!
                 $li = 0;
                 foreach ($phone_info['line'] as $line) {
-                    $line_options = is_array($line_ops[$line['line']]) ? $line_ops[$line['line']] : array();
+$line_options = $line_ops[$line['line']] ?? [];//$line_options = is_array($line_ops[$line['line']]) ? $line_ops[$line['line']] : array();
                     $line_statics = array(
 					'line' => $line['line'],
 					'username' => $line['ext'],
@@ -2041,7 +2045,7 @@ class endpointmanager {
 					'transport' => $line['transport'],
 					'trustrpid' => $line['trustrpid'],
 					'callerid' => $line['callerid'],
-					'encryption' => $line['encryption'],							
+					'encryption' => $line['encryption'] ?? '',							
 					'tech' => $line['tech'],
 					'ipei' => $line['ipei'],
 					'myvoicemail' => $provisioner_lib->settings['myvoicemail'],
@@ -2051,10 +2055,10 @@ class endpointmanager {
 					'primtimeserver' => $this->global_cfg['ntp'],
 					'globaladminpassword' => $this->global_cfg['adminpass'],
 					'globaluserpassword' => $this->global_cfg['userpass'],
-					'provisuser' => $getSysadminSettings['provisuser']['value'],
-					'provispass' => $getSysadminSettings['provispass']['value'],
-					'sslhpro' => $getSysadminSettings['sslhpro']['value'],
-					'hpro' => $getSysadminSettings['hpro']['value']
+					'provisuser' => $getSysadminSettings['provisuser']['value'] ?? '',
+					'provispass' => $getSysadminSettings['provispass']['value'] ?? '',
+					'sslhpro'    => $getSysadminSettings['sslhpro']['value'] ?? '',
+					'hpro'       => $getSysadminSettings['hpro']['value'] ?? '',
 					);
 	
 
@@ -2075,17 +2079,17 @@ class endpointmanager {
 					$provisioner_lib->settings['acc' . $line['line'] . 'transport'] = $line['transport'];
 					$provisioner_lib->settings['acc' . $line['line'] . 'trustrpid'] = $line['trustrpid'];
 					$provisioner_lib->settings['acc' . $line['line'] . 'callerid'] = $line['callerid'];
-					$provisioner_lib->settings['acc' . $line['line'] . 'encryption'] = $line['encryption'];
+					$provisioner_lib->settings['acc' . $line['line'] . 'encryption'] = $line['encryption'] ?? '';
 					$provisioner_lib->settings['acc' . $line['line'] . 'server_port'] = $line['server_port'];
 					$provisioner_lib->settings['acc' . $line['line'] . 'ipei'] = $line['ipei'];
 					$provisioner_lib->settings['server_host'] = $this->global_cfg['srvip'];
 					$provisioner_lib->settings['primtimeserver'] = $this->global_cfg['ntp'];
 					$provisioner_lib->settings['globaladminpassword'] = $this->global_cfg['adminpass'];
 					$provisioner_lib->settings['globaluserpassword'] = $this->global_cfg['userpass'];
-					$provisioner_lib->settings['provisuser'] = $getSysadminSettings['provisuser']['value'];
-					$provisioner_lib->settings['provispass'] = $getSysadminSettings['provispass']['value'];
-					$provisioner_lib->settings['sslhpro'] = $getSysadminSettings['sslhpro']['value'];
-					$provisioner_lib->settings['hpro'] = $getSysadminSettings['hpro']['value'];
+					$provisioner_lib->settings['provisuser'] = $getSysadminSettings['provisuser']['value'] ?? '';
+					$provisioner_lib->settings['provispass'] = $getSysadminSettings['provispass']['value'] ?? '' ;
+					$provisioner_lib->settings['sslhpro'] = $getSysadminSettings['sslhpro']['value'] ?? '';
+					$provisioner_lib->settings['hpro'] = $getSysadminSettings['hpro']['value'] ?? '';
 					
 					$provisioner_lib->settings['timestamp'] = time();
 
@@ -3149,7 +3153,7 @@ class endpointmanager {
         if ((!empty($model)) OR ($model > 0)) {
             $sql = "SELECT * FROM  endpointman_model_list WHERE id='" . $model . "'";
 
-            $model_row = $this->eda->sql($sql, 'getrow', DB_FETCHMODE_ASSOC);
+            $model_row = $this->eda->sql($sql, 'getRow', DB_FETCHMODE_ASSOC);
 
             $sql = "SELECT * FROM  endpointman_product_list WHERE id='" . $model_row['product_id'] . "'";
 

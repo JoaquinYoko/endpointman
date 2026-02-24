@@ -52,6 +52,7 @@ class Config {
 	public function del($var) { 
 		if ($this->isExiste($var)) { unset($this->module_conf[$var]); } 
 	}
+	
 }
 
 ?>

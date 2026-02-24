@@ -918,7 +918,7 @@ class Endpointman_Config
      * @param int $model Model ID
      * @return boolean True on sync completed. False on sync failed
      */
-    function sync_model($model, &$error = array()) {
+    public function sync_model($model, &$error = array()) {
         if ((!empty($model)) OR ($model > 0)) {
             $sql = "SELECT * FROM  endpointman_model_list WHERE id='" . $model . "'";
             $model_row = sql($sql, 'getrow', DB_FETCHMODE_ASSOC);

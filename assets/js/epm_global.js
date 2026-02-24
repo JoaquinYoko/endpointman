@@ -1,6 +1,17 @@
+// --- INICIO PARCHE COMPATIBILIDAD ---
+jQuery.browser = {};
+(function () {
+    jQuery.browser.msie = false;
+    jQuery.browser.version = 0;
+    if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) {
+        jQuery.browser.msie = true;
+        jQuery.browser.version = RegExp.$1;
+    }
+})();
+// --- FIN PARCHE ---
+
 "use strict";
 var box = null;
-
 $(document).ready(function() {
 	var displayActual = epm_global_getDisplayActual();
 	

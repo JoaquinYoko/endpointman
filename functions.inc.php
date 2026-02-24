@@ -204,7 +204,9 @@ function endpointman_configpageload() {
     $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
     $extdisplay = isset($_REQUEST['extdisplay']) ? $_REQUEST['extdisplay'] : null;
     if (isset($extdisplay) && !empty($extdisplay)) {
-        $sql = "SELECT tech FROM devices WHERE id = " . $extdisplay;
+	$extdisplay = (int)$extdisplay;
+        $sql = "SELECT tech FROM devices WHERE id = $extdisplay";
+//	$tech = "pjsip";
         $tech = $endpoint->eda->sql($sql, 'getOne');
     } else {
         $tech = isset($_REQUEST['tech_hardware']) ? $_REQUEST['tech_hardware'] : null;
@@ -240,7 +242,7 @@ function endpointman_configpageload() {
 
             $sql = "SELECT mac_id,luid,line FROM endpointman_line_list WHERE ext = '" . $extdisplay . "' ";
             $line_info = $endpoint->eda->sql($sql, 'getRow', DB_FETCHMODE_ASSOC);
-            if ($line_info) {
+            if ($line_info ) {
 
                 $js = "
                         $.ajaxSetup({ cache: false });
@@ -265,7 +267,8 @@ function endpointman_configpageload() {
                 $currentcomponent->addjsfunc('model_change(value,macid)', $js);
 
                 $info = $endpoint->get_phone_info($line_info['mac_id']);
-
+//var_dump($info);
+//exit;
                 $brand_list = $endpoint->brands_available($info['brand_id'], true);
                 if (!empty($info['brand_id'])) {
                     $model_list = $endpoint->models_available(NULL, $info['brand_id']);
@@ -282,6 +285,8 @@ function endpointman_configpageload() {
                 $currentcomponent->addguielem($section, new gui_checkbox('epm_delete', $checked, 'Delete', 'Delete this Extension from Endpoint Manager'), 9);
 // phone web interface link
 	class gui_link_nw_tab extends guitext {
+	public $html_text;
+	public $elemname;
     function __construct($elemname, $text, $url, $userlang = true) {
         $parent_class = get_parent_class($this);
         $this->html_text = "<a href=\"$url\" target=\"_blank\" id =\"$this->elemname\">$text</a>";
@@ -323,11 +328,17 @@ function endpointman_configpageload() {
                 $model_list = array();
                 $line_list = array();
                 $template_list = array();
-
+		$info = [
+    		'mac'         => '',
+    		'brand_id'    => '',
+    		'model_id'    => '',
+    		'line'        => '',
+    		'template_id' => ''
+		];
                 $currentcomponent->addguielem($section, new gui_textbox('epm_mac', $info['mac'], 'MAC Address', 'The MAC Address of the Phone Assigned to this Extension/Device. <br />(Leave Blank to Remove from Endpoint Manager)', '', 'Please enter a valid MAC Address', true, 17, false), 9);
                 $currentcomponent->addguielem($section, new gui_selectbox('epm_brand', $brand_list, $info['brand_id'], 'Brand', 'The Brand of this Phone.', false, 'frm_' . $display . '_brand_change(this.options[this.selectedIndex].value)', false), 9);
                 $currentcomponent->addguielem($section, new gui_selectbox('epm_model', $model_list, $info['model_id'], 'Model', 'The Model of this Phone.', false, 'frm_' . $display . '_model_change(this.options[this.selectedIndex].value,document.getElementById(\'epm_mac\').value)', false), 9);
-                $currentcomponent->addguielem($section, new gui_selectbox('epm_line', $line_list, $line_info['line'], 'Line', 'The Line of this Extension/Device.', false, '', false), 9);
+//                $currentcomponent->addguielem($section, new gui_selectbox('epm_line', $line_list, $line_info['line'], 'Line', 'The Line of this Extension/Device.', false, '', false), 9);
                 $currentcomponent->addguielem($section, new gui_selectbox('epm_temps', $template_list, $info['template_id'], 'Template', 'The Template of this Phone.', false, '', false), 9);
                 $currentcomponent->addguielem($section, new guitext('epm_note', 'Note: This might reboot the phone if it\'s already registered to Asterisk'));
 		

@@ -655,7 +655,7 @@
 	//print_r($value3);
 	?>
 
-        <tr class="rowGroup<?php echo $value2["master_id"];?> toggle_all" id="<?php echo $value2["master_id"];?>" style="display:none;">
+        <tr class="rowGroup<?php echo $value2["master_id"];?> toggle_all" id="<?php echo $value2["master_id"];?>">
 			<td align='center' width="7%"><i class="icon-off icon-large <?php if ($value3['status']['status'] === TRUE) {echo "green";} else { echo "red";}?> alt="<?php echo $value3['status']['ip'];?>:<?php echo $value3['status']['port'];?>"></i><input type="checkbox" class="device" name="selected[]" value="<?php echo $value3['ext'];?>"></td>
             <td align='center' width='13%'><?php echo $value3['mac'];?></td>
 			<td align='center' width='13%'><?php echo $value3['ipei'];?></td>

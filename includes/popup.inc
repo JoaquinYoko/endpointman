@@ -6,8 +6,82 @@
 require 'functions.inc';
 
 $endpoint = new endpointmanager();
-
 if($_REQUEST['pop_type'] == 'edit_specifics') {
+
+    if(file_exists(PHONE_MODULES_PATH . 'endpoint/global_template_data.json')) {
+        $template_list[0] = 'global_template_data.json';
+
+        $phone_info = $endpoint->get_phone_info($_REQUEST['edit_id']);
+
+        $sql = 'SELECT max_lines FROM endpointman_model_list WHERE id = '. $phone_info['model_id'];
+        $lines = $endpoint->eda->sql($sql, 'getOne');
+        $merged = $endpoint->merge_data(PHONE_MODULES_PATH . 'endpoint/', $template_list, $lines);
+
+        // remove stuff that is meaningless in this context
+        unset($merged['data']['globals']['globals']['option|mac']);
+        unset($merged['data']['globals']['globals']['break|0']);
+        unset($merged['data']['globals']['globals']['option|provision_protocol']);
+
+        $html_array = $endpoint->generate_gui_html(serialize($merged), NULL, TRUE, NULL, $lines);
+
+        $specific_data = array();
+
+        if (isset($_REQUEST['button_save'])) {
+            foreach ($_REQUEST as $key => $data) {
+                $key = str_replace('freepbx_', '', $key);
+                if (isset($_REQUEST['freepbx_' . $key])) {
+                    $specific_data['freepbx'][$key] = TRUE;
+                }
+                if ($endpoint->arraysearchrecursive($key, $html_array, 'key')) {
+                    if(!isset($specific_data['freepbx'][$key])) {
+                        $specific_data['data'][$key] = $data;
+                    }
+                }
+            }
+
+            $specific_data['data']['use_dhcp'] = isset($specific_data['data']['use_dhcp']) ? TRUE : FALSE;
+
+            $sql = "UPDATE endpointman_mac_list SET specific_settings = '" . serialize($specific_data) . "' WHERE id =" . $_REQUEST['edit_id'];
+            $endpoint->eda->sql($sql);
+
+        } else {
+            $sql = 'SELECT specific_settings FROM endpointman_mac_list WHERE id ='. $_REQUEST['edit_id'];
+            $specific_data = unserialize($endpoint->eda->sql($sql, 'getOne'));
+        }
+
+        // 🔧 Asegurar que $specific_data['data'] sea siempre un array válido
+        if (!isset($specific_data) || !is_array($specific_data)) {
+            $specific_data = [];
+        }
+        if (!isset($specific_data['data']) || !is_array($specific_data['data'])) {
+            $specific_data['data'] = [];
+        }
+
+        foreach ($phone_info['line'] as $data) {
+            $lid = $data['line'];
+            $key_prefix = 'line|' . $lid . '|';
+
+            $specific_data['data'][$key_prefix . 'displayname'] = $specific_data['data'][$key_prefix . 'displayname'] ?? $data['description'];
+            $specific_data['data'][$key_prefix . 'username']    = $specific_data['data'][$key_prefix . 'username'] ?? $data['ext'];
+            $specific_data['data'][$key_prefix . 'authname']    = $specific_data['data'][$key_prefix . 'authname'] ?? $data['ext'];
+            $specific_data['data'][$key_prefix . 'secret']      = $specific_data['data'][$key_prefix . 'secret'] ?? $data['secret'];
+            $specific_data['data'][$key_prefix . 'server_host'] = $specific_data['data'][$key_prefix . 'server_host'] ?? $endpoint->global_cfg['srvip'];
+            $specific_data['data'][$key_prefix . 'server_port'] = $specific_data['data'][$key_prefix . 'server_port'] ?? 5060;
+            $specific_data['data'][$key_prefix . 'line_enabled'] = $specific_data['data'][$key_prefix . 'line_enabled'] ?? TRUE;
+        }
+
+        $specific_data['data']['ntp'] = $specific_data['data']['ntp'] ?? $endpoint->global_cfg['ntp'];
+        $specific_data['data']['use_dhcp'] = isset($specific_data['data']['use_dhcp']) ? TRUE : FALSE;
+
+        $html_array = $endpoint->generate_gui_html(serialize($merged), serialize($specific_data), TRUE, NULL, $lines);
+    }
+
+    $endpoint->prepare_message_box();
+    $endpoint->tpl->assign("html_array", $html_array);
+    echo $endpoint->tpl->draw('specifics_pop');
+}
+
+/*if($_REQUEST['pop_type'] == 'edit_specifics') {
 
     if(file_exists(PHONE_MODULES_PATH . 'endpoint/global_template_data.json')) {
         $template_list[0] = 'global_template_data.json';
@@ -68,7 +142,7 @@ if($_REQUEST['pop_type'] == 'edit_specifics') {
     $endpoint->prepare_message_box();
     $endpoint->tpl->assign("html_array", $html_array);
     echo $endpoint->tpl->draw( 'specifics_pop' );
-}
+}*/
 
 if($_REQUEST['pop_type'] == 'edit_template') {
     if(empty($_REQUEST['edit_id'])) {

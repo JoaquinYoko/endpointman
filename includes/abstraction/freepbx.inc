@@ -26,7 +26,23 @@ class epm_data_abstraction {
 
     function sql($sql, $type="query", $fetchmode=null) {
         global $db;
-        $results = $db->$type($sql, $fetchmode);
+
+        switch ($type) {
+        case 'getOne':
+        case 'getCol':
+        case 'getAssoc':
+            $results = $db->$type($sql);
+            break;
+
+        case 'getAll':
+        case 'getRow':
+        case 'query':
+            $results = $db->$type($sql, $fetchmode);
+            break;
+
+        default:
+            throw new Exception("Método no soportado: $type");
+    }//$results = $db->$type($sql, $fetchmode);
         if (DB::IsError($results)) {
             throw new Exception($results->getMessage());
             // $this->sql_error($results);

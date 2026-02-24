@@ -155,7 +155,7 @@ switch ($sub_type) {
 						if ($data == $line['ext']){
 						$sql = "SELECT mac_id FROM endpointman_line_list WHERE ext = " . $data;
 						$endpoint->eda->sql($sql);
-						$macid = $endpoint->eda->sql($sql,'getrow',DB_FETCHMODE_ASSOC);
+						$macid = $endpoint->eda->sql($sql,'getRow',DB_FETCHMODE_ASSOC);
 						$_REQUEST['selected'][$key] = $macid['mac_id'];
 						
 						}
